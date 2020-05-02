@@ -18,6 +18,7 @@
 import postData from "./../login";
 import auth from "./../auth";
 import data from "./../data";
+import f from "../localStorageData";
 
 export default {
   name: 'Login',
@@ -32,18 +33,30 @@ export default {
   methods: {
       login(e) {
           e.preventDefault();
-          if(this.input.nick=="admin"){
-              data.admin = true;
-          }
           postData(`http://localhost:8181/user/${this.input.nick}/singIn`, {
               "password": this.input.password
           }).then((dat) => {
               console.log("AA",dat);
               data.nick = this.input.nick;
+              data.role = dat.role;
+              f.setUser();
               auth.setLogin();
               this.$router.push('/');
 
           }).catch((error) => {
+              console.error('Error:', error);
+          });
+
+          fetch(`http://localhost:8181/sendCookie/${this.input.nick}`)
+              .then((response) => {
+                  return response.json();
+              })
+              .then((dat) => {
+                  data.cookie = dat;
+                  f.setCookie();
+                  console.log("COOKIE",dat);
+
+              }).catch((error) => {
               console.error('Error:', error);
           });
       },

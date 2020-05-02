@@ -1,6 +1,6 @@
 <template lang="pug">
     div.posts
-        div.createPost(@click="create")
+        div.createPost(@click="create" v-if ="intRole")
             p.create create post
             router-view
         div.list-group.list-group-flush()
@@ -23,7 +23,8 @@
         data() {
             return {
                 posts: data.posts,
-                admin: Auth.getLogin().nick == "admin"? "delete post": ''
+                admin: (Auth.getLogin().nick == "admin" || Auth.getLogin().nick == "moderator")? "delete post": '',
+                intRole: data.role != 0
             }
         },
         created:function(){

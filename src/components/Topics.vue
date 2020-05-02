@@ -20,6 +20,8 @@
             return {
                 topics: data.topics,
                 admin: Auth.getLogin().nick == "admin"? true: false,
+                moderator: Auth.getLogin().nick == "moderator"? true: false,
+
             }
         },
         created:function(){

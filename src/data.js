@@ -6,6 +6,7 @@ const data = {
     postId: localStorage.getItem('postId') || '',
     post: localStorage.getItem('post') || '',
     comments: localStorage.getItem('comments') || '',
-    admin: false,
+    role: localStorage.getItem('user') || '',
+    cookie: localStorage.getItem('cookie') || '',
 };
 export default data

@@ -5,17 +5,23 @@
                 h4(v-model = "post") {{post[0].title}}
             div.content(v-model = "post") {{post[0].content}}
             div.name(v-model = "post") {{post[0].author}}
+            div.date
+                p {{post[0].created.split('.')[0].split('T')[0]}} {{post[0].created.split('.')[0].split('T')[1]}}
 
         div.post_comments
             div.list-group.list-group-flush
                 template(v-for="item in comments" v-bind:id="item.id")
-                    li.list-group-item
+
+                    li.comment1_content
                         div.comment_name {{item.author}}
                         div.comment_content {{item.content}}
+
                         div.likes {{item.likes}}
                             img.like(src = './like.png' v-bind:id="item.id" @click ="like")
+                        div.date
+                            p {{item.created.split('.')[0].split('T')[0]}}
 
-        div.send_comment
+        div.send_comment(v-if="role")
             div(class="input-group mb-3")
                 input(type="text" class="form-control" v-model = "input" placeholder="Type ur comment" aria-label="Recipient's username" aria-describedby="basic-addon2")
                 div(class="input-group-append" @click ="comment")
@@ -28,17 +34,20 @@
 <script>
     import postData from "@/login";
     import data from "./../data";
+    import f from "../localStorageData";
     import Auth from "@/auth";
-
+    console.log("USER ROLE", f.getUser().role);
     export default {
         name: "OnePost",
         data() {
             return {
                 post: data.post,
                 comments: data.comments,
-                input:""
+                input:"",
+                role: data.role != 0,
             }
         },
+
         created:function(){
             if(Auth.getLogin().nick == null){
                 this.$router.push('/login');
@@ -60,6 +69,16 @@
                     return response.json();
                 })
                 .then((dat) => {
+                    dat.sort(function (a, b) {
+                        if (a.created.split('.')[0].split('T')[0] < b.created.split('.')[0].split('T')[0]) {
+                            return -1;
+                        }
+                        if (b.created.split('.')[0].split('T')[0] < a.created.split('.')[0].split('T')[0]) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    console.log("DATA",dat);
                     data.comments = dat;
                     this.comments = dat;
                     console.log("comments",dat);
@@ -109,6 +128,9 @@
         width: 30px;
         height: 30px;
     }
+    .list-group{
+        min-width: 50%;
+    }
     .post_content{
         display: flex;
         flex-direction: column;
@@ -121,6 +143,20 @@
         color: #444444;
         font-family: monospace;
 
+    }
+
+    .comment1_content{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        border: thick double #BDCCFF;
+        height: 200px;
+        min-width: max-content;
+        margin: 10px;
+        padding: 10px;
+        color: #444444;
+        font-family: monospace;
+        padding-bottom: 0px;
     }
     .title{
         display: flex;
@@ -139,6 +175,14 @@
     .likes{
         display: flex;
         justify-content: flex-end;
+    }
+    .date{
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0;
+    }
+    .date p{
+        margin-bottom: 0px;
     }
     .content{
         display: flex;

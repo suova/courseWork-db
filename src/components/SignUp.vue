@@ -26,6 +26,7 @@
     import auth from "@/auth";
     import postData from "@/login";
     import data from "./../data";
+    import f from "../localStorageData";
 
     export default {
         name: "SignUp",
@@ -51,7 +52,18 @@
                     "email": this.input.email,
                     "country": this.input.country
                 }).then((dat) => {
-                    console.log("AA",dat);
+                    fetch(`http://localhost:8181/sendCookie/${dat.nickname}`)
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((dat) => {
+                            data.cookie = dat;
+                            f.setCookie();
+                            console.log("COOKIE",dat);
+
+                        }).catch((error) => {
+                        console.error('Error:', error);
+                    });
                     data.nick = dat.nickname;
                     auth.setLogin();
                     this.$router.push('/');
@@ -59,6 +71,7 @@
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
+
             }
         }
     }

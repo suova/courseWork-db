@@ -7,6 +7,7 @@ import SignUp from "@/components/SignUp";
 import MainHelp from "@/components/MainHelp";
 import CreatePost from "@/components/CreatePost";
 import CreateTopic from "@/components/CreateTopic";
+import UsersList from "@/components/UsersList";
 
 
 
@@ -48,6 +49,11 @@ const routes = [
         path: "/create/forum",
         name: "createTopic",
         component: CreateTopic
+    },
+    {
+        path: "/allUsers",
+        name: "showUsers",
+        component: UsersList
     },
 
 ];

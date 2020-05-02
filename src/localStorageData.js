@@ -1,3 +1,4 @@
+import data from "./data";
 export default {
     setTopics: function(data){
         localStorage.setItem("topics",data);
@@ -55,5 +56,22 @@ export default {
         return {
             topics:localStorage.getItem("comments")
         }
-    }
+    },
+    setUser: function(){
+        localStorage.setItem("user",data.role);
+    },
+    getUser: function(){
+        return {
+            user:localStorage.getItem("user")
+        }
+    },
+
+    setCookie: function(){
+        localStorage.setItem("cookie",data.cookie);
+    },
+    getCookie: function(){
+        return {
+            cookie:localStorage.getItem("cookie")
+        }
+    },
 }
